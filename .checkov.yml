@@ -1,0 +1,24 @@
+# Checkov configuration for this sample repository.
+# These checks are skipped with documented justification.
+
+skip-check:
+  # Lambda VPC: The Glue job (not Lambda) connects to the external API.
+  # Lambdas only process internal data (event payloads, DynamoDB) and don't
+  # need VPC access. Adding VPC would require NAT Gateway for no security benefit.
+  - CKV_AWS_117
+
+  # Lambda code-signing: Requires AWS Signer infrastructure setup.
+  # Code is deployed via Terraform from a trusted CI/CD pipeline.
+  - CKV_AWS_272
+
+  # S3 event notifications: Not required for this pipeline's data flow.
+  # The pipeline is triggered by EventBridge schedule, not S3 events.
+  - CKV2_AWS_62
+
+  # Secrets rotation: API credentials are issued by an external provider.
+  # Rotation is managed outside AWS (by the API vendor's credential lifecycle).
+  - CKV2_AWS_57
+
+  # S3 cross-region replication: This is a single-region deployment.
+  # Multi-region DR is out of scope for this sample.
+  - CKV_AWS_144

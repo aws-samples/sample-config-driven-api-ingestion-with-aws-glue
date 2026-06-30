@@ -1,0 +1,44 @@
+# Terraform
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/*.tfplan
+infra/.terraform.lock.hcl
+infra/.build/
+
+# Terraform sensitive variable files (environment configs are committed)
+infra/terraform.tfvars
+infra/*.auto.tfvars
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Certificates (never commit real certs)
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Logs
+*.log
+
+# OS
+Thumbs.db

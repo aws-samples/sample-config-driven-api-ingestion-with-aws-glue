@@ -1,0 +1,157 @@
+{
+    "Comment": "Config-Driven API Ingestion Pipeline. NOTE: This file is kept as a reference. The actual state machine definition is managed inline in infra/step_functions.tf via Terraform.",
+    "StartAt": "Pipeline_Input",
+    "States": {
+        "Pipeline_Input": {
+            "Type": "Pass",
+            "Comment": "Accepts EventBridge event payload",
+            "Next": "Pre-processing Lambda"
+        },
+        "Pre-processing Lambda": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Comment": "Resolves entity names to API endpoints and validates input",
+            "Parameters": {
+                "FunctionName": "<pre-processing-lambda-arn>",
+                "Payload.$": "$"
+            },
+            "ResultPath": "$.lambdaResult",
+            "ResultSelector": {
+                "body.$": "$.Payload.body",
+                "statusCode.$": "$.Payload.statusCode"
+            },
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "Lambda.ServiceException",
+                        "Lambda.AWSLambdaException",
+                        "Lambda.SdkClientException",
+                        "Lambda.TooManyRequestsException"
+                    ],
+                    "IntervalSeconds": 1,
+                    "MaxAttempts": 3,
+                    "BackoffRate": 2,
+                    "JitterStrategy": "FULL"
+                }
+            ],
+            "Next": "EntityJSONFormatter"
+        },
+        "EntityJSONFormatter": {
+            "Type": "Pass",
+            "Comment": "Parses the JSON string body from Lambda into a JSON object",
+            "Parameters": {
+                "parsedBody.$": "States.StringToJson($.lambdaResult.body)"
+            },
+            "Next": "Map State for Entities"
+        },
+        "Map State for Entities": {
+            "Type": "Map",
+            "Comment": "Processes each entity in parallel via Glue jobs",
+            "ItemsPath": "$.parsedBody.entities",
+            "ResultPath": "$.mapResults",
+            "MaxConcurrency": 0,
+            "ItemProcessor": {
+                "ProcessorConfig": {
+                    "Mode": "INLINE"
+                },
+                "StartAt": "API Consumer Glue Job",
+                "States": {
+                    "API Consumer Glue Job": {
+                        "Type": "Task",
+                        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+                        "Parameters": {
+                            "JobName": "<glue-job-name>",
+                            "Arguments": {
+                                "--entity_type.$": "$.entity_type",
+                                "--endpoint.$": "$.endpoint",
+                                "--params.$": "States.JsonToString($.params)",
+                                "--load_type.$": "$.load_type",
+                                "--ingestion_id.$": "States.UUID()"
+                            }
+                        },
+                        "ResultPath": "$.glueJobResult",
+                        "Retry": [
+                            {
+                                "ErrorEquals": ["States.TaskFailed"],
+                                "IntervalSeconds": 60,
+                                "MaxAttempts": 3,
+                                "BackoffRate": 2
+                            }
+                        ],
+                        "Catch": [
+                            {
+                                "ErrorEquals": ["States.ALL"],
+                                "ResultPath": "$.error",
+                                "Next": "Handle Error"
+                            }
+                        ],
+                        "Next": "ProcessMapResults"
+                    },
+                    "ProcessMapResults": {
+                        "Type": "Pass",
+                        "End": true
+                    },
+                    "Handle Error": {
+                        "Type": "Pass",
+                        "Parameters": {
+                            "status": "FAILED",
+                            "entity_type.$": "$.entity_type",
+                            "errorDetails.$": "$.error"
+                        },
+                        "End": true
+                    }
+                }
+            },
+            "Next": "Check All Jobs Completed"
+        },
+        "Check All Jobs Completed": {
+            "Type": "Choice",
+            "Choices": [
+                {
+                    "Variable": "$.mapResults",
+                    "IsPresent": true,
+                    "Next": "Post-processing Lambda"
+                }
+            ],
+            "Default": "Job Status Check Failed"
+        },
+        "Job Status Check Failed": {
+            "Type": "Fail",
+            "Error": "JobStatusCheckFailed",
+            "Cause": "Unable to determine status of one or more Glue jobs"
+        },
+        "Post-processing Lambda": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Comment": "Aggregates results and writes execution summaries to DynamoDB",
+            "Parameters": {
+                "FunctionName": "<post-processing-lambda-arn>",
+                "Payload": {
+                    "input": {
+                        "mapResults.$": "$.mapResults",
+                        "parsedBody.$": "$.parsedBody"
+                    }
+                }
+            },
+            "ResultSelector": {
+                "body.$": "$.Payload.body",
+                "statusCode.$": "$.Payload.statusCode"
+            },
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "Lambda.ServiceException",
+                        "Lambda.AWSLambdaException",
+                        "Lambda.SdkClientException",
+                        "Lambda.TooManyRequestsException"
+                    ],
+                    "IntervalSeconds": 1,
+                    "MaxAttempts": 3,
+                    "BackoffRate": 2,
+                    "JitterStrategy": "FULL"
+                }
+            ],
+            "End": true
+        }
+    }
+}

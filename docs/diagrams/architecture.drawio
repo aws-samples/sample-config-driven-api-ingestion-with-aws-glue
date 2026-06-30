@@ -1,0 +1,118 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.2.15 Chrome/134.0.6998.205 Electron/35.2.1 Safari/537.36" version="26.2.15" pages="1">
+  <diagram name="System Overview" id="system-overview">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- AWS Cloud boundary -->
+        <mxCell id="aws-cloud" value="AWS Cloud" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="1440" height="820" as="geometry" />
+        </mxCell>
+        <!-- External API -->
+        <mxCell id="ext-api" value="External REST API&#xa;(Paginated, Nested JSON)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.general_saml;labelBackgroundColor=none;sketch=0;fillColor=#D86613;strokeColor=none;fontColor=#333333;fontSize=11;fontStyle=1;align=center;verticalAlign=bottom;" vertex="1" parent="1">
+          <mxGeometry x="720" y="900" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- EventBridge Scheduler -->
+        <mxCell id="eventbridge" value="Amazon EventBridge&#xa;Scheduler&#xa;(rate: 8 hours)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge" vertex="1" parent="1">
+          <mxGeometry x="140" y="200" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- Step Functions -->
+        <mxCell id="sfn" value="AWS Step Functions&#xa;(Orchestration)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.step_functions" vertex="1" parent="1">
+          <mxGeometry x="400" y="200" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- Pre-processing Lambda -->
+        <mxCell id="pre-lambda" value="Pre-processing&#xa;Lambda&#xa;(Endpoint Resolution)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#ED7100;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda" vertex="1" parent="1">
+          <mxGeometry x="560" y="120" width="50" height="50" as="geometry" />
+        </mxCell>
+        <!-- Post-processing Lambda -->
+        <mxCell id="post-lambda" value="Post-processing&#xa;Lambda&#xa;(Audit Summary)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#ED7100;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda" vertex="1" parent="1">
+          <mxGeometry x="560" y="280" width="50" height="50" as="geometry" />
+        </mxCell>
+        <!-- Glue Job -->
+        <mxCell id="glue" value="AWS Glue Python Shell&#xa;(Config-Driven Engine)&#xa;&#xa;• Pagination&#xa;• JSON Normalization&#xa;• Schema Validation&#xa;• PK Deduplication" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.glue" vertex="1" parent="1">
+          <mxGeometry x="700" y="400" width="60" height="60" as="geometry" />
+        </mxCell>
+        <!-- Config file -->
+        <mxCell id="config" value="config.json&#xa;(ER Model Definition)&#xa;&#xa;tables, fields,&#xa;primary keys,&#xa;relationships" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=0.27;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="880" y="360" width="140" height="120" as="geometry" />
+        </mxCell>
+        <!-- Secrets Manager -->
+        <mxCell id="secrets" value="Secrets&#xa;Manager" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager" vertex="1" parent="1">
+          <mxGeometry x="480" y="500" width="48" height="48" as="geometry" />
+        </mxCell>
+        <!-- DynamoDB -->
+        <mxCell id="dynamodb" value="DynamoDB&#xa;Audit Tables&#xa;(Detail + Summary)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#C925D1;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.dynamodb" vertex="1" parent="1">
+          <mxGeometry x="1100" y="200" width="50" height="50" as="geometry" />
+        </mxCell>
+        <!-- S3 Raw -->
+        <mxCell id="s3-raw" value="S3&#xa;Raw JSON&#xa;(Original Copy)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#3F8624;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3" vertex="1" parent="1">
+          <mxGeometry x="1100" y="400" width="50" height="50" as="geometry" />
+        </mxCell>
+        <!-- S3 Transformed -->
+        <mxCell id="s3-csv" value="S3&#xa;Normalized CSV&#xa;(Per Table)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#3F8624;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=1;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3" vertex="1" parent="1">
+          <mxGeometry x="1100" y="560" width="50" height="50" as="geometry" />
+        </mxCell>
+        <!-- S3 Errors -->
+        <mxCell id="s3-errors" value="S3&#xa;Error Records" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#3F8624;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3" vertex="1" parent="1">
+          <mxGeometry x="1100" y="720" width="50" height="50" as="geometry" />
+        </mxCell>
+        <!-- S3 Artifacts -->
+        <mxCell id="s3-artifacts" value="S3 Artifacts&#xa;(config, cert, script)" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#3F8624;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3" vertex="1" parent="1">
+          <mxGeometry x="880" y="560" width="50" height="50" as="geometry" />
+        </mxCell>
+        <!-- Arrows -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="eventbridge" target="sfn" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sfn" target="pre-lambda" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sfn" target="glue" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sfn" target="post-lambda" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge5" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="config" target="glue" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="glue" target="s3-raw" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="glue" target="s3-csv" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="glue" target="s3-errors" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="glue" target="dynamodb" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="post-lambda" target="dynamodb" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="glue" target="secrets" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge12" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#D86613;" edge="1" source="glue" target="ext-api" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge13" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" edge="1" source="glue" target="s3-artifacts" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- Labels on key edges -->
+        <mxCell id="label1" value="mTLS + OAuth2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontColor=#D86613;" vertex="1" connectable="0" parent="edge12">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label2" value="Drives behavior" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;fontStyle=2;" vertex="1" connectable="0" parent="edge5">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+</mxfile>

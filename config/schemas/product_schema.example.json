@@ -1,0 +1,21 @@
+{
+  "product": {
+    "product_id": "STRING",
+    "sequence_id": "INT",
+    "status_code": "STRING",
+    "product_name": "STRING",
+    "product_type": "STRING",
+    "last_modified_date": "TIMESTAMP",
+    "market_code": "STRING",
+    "region_code": "STRING"
+  },
+  "product_location": {
+    "product_id": "STRING",
+    "address_type": "STRING",
+    "address_line_1": "STRING",
+    "city": "STRING",
+    "state": "STRING",
+    "postal_code": "STRING",
+    "country": "STRING"
+  }
+}

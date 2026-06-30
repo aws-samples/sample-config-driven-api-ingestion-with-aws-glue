@@ -1,0 +1,96 @@
+{
+  "entities": {
+    "product": {
+      "main_table": {
+        "name": "product",
+        "is_multi_source": true,
+        "source_paths": [
+          {"path": "BasicInformation"},
+          {"path": "ActivationInformation"},
+          {"path": "HistoricInformation"}
+        ],
+        "not_null": ["product_id"],
+        "primary_key": {
+          "columns": ["product_id"],
+          "composite": false
+        },
+        "fields": [
+          {"name": "product_id", "source": "ProductID"},
+          {"name": "sequence_id", "source": "SequenceID"},
+          {"name": "status_code", "source": "StatusCode"},
+          {"name": "product_name", "source": "ProductName"},
+          {"name": "product_type", "source": "ProductType"},
+          {"name": "last_modified_date", "source": "LastModifiedDate"},
+          {"name": "market_code", "source": "MarketCode"},
+          {"name": "region_code", "source": "RegionCode"}
+        ]
+      },
+      "child_tables": [
+        {
+          "name": "product_location",
+          "source_path": "Addresses",
+          "foreign_key": {
+            "columns": ["product_id"],
+            "references": "product"
+          },
+          "fields": [
+            {"name": "product_id", "source": "ProductID", "parent_field": true},
+            {"name": "address_type", "source": "AddressType"},
+            {"name": "address_line_1", "source": "AddressLine1"},
+            {"name": "city", "source": "City"},
+            {"name": "state", "source": "State"},
+            {"name": "postal_code", "source": "PostalCode"},
+            {"name": "country", "source": "Country"}
+          ]
+        }
+      ]
+    },
+    "order": {
+      "main_table": {
+        "name": "order",
+        "is_multi_source": false,
+        "source_paths": [
+          {"path": ""}
+        ],
+        "not_null": ["order_id"],
+        "primary_key": {
+          "columns": ["order_id"],
+          "composite": false
+        },
+        "fields": [
+          {"name": "order_id", "source": "OrderID"},
+          {"name": "order_name", "source": "OrderName"},
+          {"name": "order_description", "source": "Description"},
+          {"name": "status_code", "source": "StatusCode"},
+          {"name": "category_id", "source": "CategoryID"},
+          {"name": "market_code", "source": "MarketCode"},
+          {"name": "last_modified_date", "source": "LastModifiedDate"}
+        ]
+      },
+      "child_tables": []
+    },
+    "vendor": {
+      "main_table": {
+        "name": "vendor",
+        "is_multi_source": false,
+        "source_paths": [
+          {"path": ""}
+        ],
+        "not_null": ["vendor_id"],
+        "primary_key": {
+          "columns": ["vendor_id"],
+          "composite": false
+        },
+        "fields": [
+          {"name": "vendor_id", "source": "VendorID"},
+          {"name": "vendor_name", "source": "VendorName"},
+          {"name": "status_code", "source": "StatusCode"},
+          {"name": "region_code", "source": "RegionCode"},
+          {"name": "market_code", "source": "MarketCode"},
+          {"name": "last_modified_date", "source": "LastModifiedDate"}
+        ]
+      },
+      "child_tables": []
+    }
+  }
+}
