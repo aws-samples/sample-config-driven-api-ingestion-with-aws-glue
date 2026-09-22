@@ -74,7 +74,8 @@ resource "aws_iam_role_policy" "glue_dynamodb" {
         Sid    = "WriteDetailAudit"
         Effect = "Allow"
         Action = [
-          "dynamodb:PutItem"
+          "dynamodb:PutItem",
+          "dynamodb:Query"
         ]
         Resource = aws_dynamodb_table.detail_audit.arn
       }
